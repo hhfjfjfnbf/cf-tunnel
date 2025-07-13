@@ -1,14 +1,21 @@
-name: Cloudflared Tunnel
+name: cf-tunnel
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "*/30 * * * *"
 
 jobs:
-  tunnel:
+  run:
     runs-on: ubuntu-latest
     steps:
-      - name: Run Cloudflared Tunnel
+      - name: Download cloudflared
         run: |
-          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
-          chmod +x cloudflared
-          ./cloudflared tunnel run --token eyJhIjoiMGQ1MTNmYjQ2ZWJkODc2NTA3MTZhMGQ3Yzk1MjUwMjQiLCJ0IjoiZDU1MjgxYjAtNjk0NC00MjdiLWExNDAtOGUxYTEzZDc5YzljIiwicyI6Ik1qQTRPVEk0WVRrdE9EQTJNaTAwTTJZd0xXRXlaVEF0TVRoaE9Ea3dNRE5oTlRGbCJ9
+          wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+          sudo dpkg -i cloudflared-linux-amd64.deb
+
+      - name: Run tunnel
+        run: |
+          echo "${{ secrets.CLOUDFLARED_TOKEN }}" > tunnel.json
+          nohup cloudflared tunnel run --config tunnel.json > output.log 2>&1 &
+          sleep 30
