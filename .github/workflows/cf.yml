@@ -1,21 +1,17 @@
-name: cf-tunnel
+tunnel: <你的 tunnel id>
+credentials-file: /root/.cloudflared/<你的 tunnel id>.json
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: "*/30 * * * *"
+ingress:
+  - hostname: ""
+    service: ssh://localhost:22
+  - service: http://localhost:8080
 
-jobs:
-  run:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download cloudflared
-        run: |
-          wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-          sudo dpkg -i cloudflared-linux-amd64.deb
+originRequest:
+  noTLSVerify: true
+  proxyProtocol: false
 
-      - name: Run tunnel
-        run: |
-          echo "${{ secrets.CLOUDFLARED_TOKEN }}" > tunnel.json
-          nohup cloudflared tunnel run --config tunnel.json > output.log 2>&1 &
-          sleep 30
+args:
+  - --protocol
+  - tcp
+  - --proxy-password
+  - freevpn123
