@@ -1,17 +1,21 @@
-tunnel: 644057a1-96bb-4bfa-80d6-b4adda3619d8
-credentials-file: /root/.cloudflared/644057a1-96bb-4bfa-80d6-b4adda3619d8.json
+name: CF Tunnel
 
-ingress:
-  - hostname: ""
-    service: ssh://localhost:22
-  - service: http://localhost:8080
+on:
+  push:
+    paths:
+      - '.github/workflows/cf.yml'
+  workflow_dispatch:
 
-originRequest:
-  noTLSVerify: true
-  proxyProtocol: false
+jobs:
+  tunnel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install cloudflared
+        run: |
+          wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+          chmod +x cloudflared-linux-amd64
+          sudo mv cloudflared-linux-amd64 /usr/local/bin/cloudflared
 
-args:
-  - --protocol
-  - tcp
-  - --proxy-password
-  - freevpn123
+      - name: Run tunnel
+        run: |
+          cloudflared tunnel run --token eyJhIjoiMGQ1MTNmYjQ2ZWJkODc2NTA3MTZhMGQ3Yzk1MjUwMjQiLCJ0IjoiZDU1MjgxYjAtNjk0NC00MjdiLWExNDAtOGUxYTEzZDc5YzljIiwicyI6Ik1qQTRPVEk0WVRrdE9EQTJNaTAwTTJZd0xXRXlaVEF0TVRoaE9Ea3dNRE5oTlRGbCJ9
