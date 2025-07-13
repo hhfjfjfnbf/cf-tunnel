@@ -1,0 +1,14 @@
+name: Cloudflared Tunnel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tunnel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Cloudflared Tunnel
+        run: |
+          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+          chmod +x cloudflared
+          ./cloudflared tunnel run --token eyJhIjoiMGQ1MTNmYjQ2ZWJkODc2NTA3MTZhMGQ3Yzk1MjUwMjQiLCJ0IjoiZDU1MjgxYjAtNjk0NC00MjdiLWExNDAtOGUxYTEzZDc5YzljIiwicyI6Ik1qQTRPVEk0WVRrdE9EQTJNaTAwTTJZd0xXRXlaVEF0TVRoaE9Ea3dNRE5oTlRGbCJ9
