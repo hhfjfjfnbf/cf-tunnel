@@ -1,5 +1,5 @@
-tunnel: <你的 tunnel id>
-credentials-file: /root/.cloudflared/<你的 tunnel id>.json
+tunnel: 644057a1-96bb-4bfa-80d6-b4adda3619d8
+credentials-file: /root/.cloudflared/644057a1-96bb-4bfa-80d6-b4adda3619d8.json
 
 ingress:
   - hostname: ""
